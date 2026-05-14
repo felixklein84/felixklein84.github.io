@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { cvSections, profile } from '../data/cv';
+---
+
+<BaseLayout title="CV — Felix Klein">
+  <section class="page-hero compact">
+    <p class="eyebrow">Curriculum vitae</p>
+    <h1>{profile.name}</h1>
+    <p>{profile.headline} · {profile.location}</p>
+    <div class="hero-actions">
+      <a class="button primary" href="/cv/Felix_Klein_CV.pdf" target="_blank">Download PDF CV</a>
+      <a class="button ghost" href={`mailto:${profile.email}`}>Email</a>
+    </div>
+  </section>
+
+  <section class="cv-grid">
+    {cvSections.map((section) => (
+      <article class="cv-card">
+        <h2>{section.title}</h2>
+        <ul>
+          {section.items.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    ))}
+  </section>
+</BaseLayout>

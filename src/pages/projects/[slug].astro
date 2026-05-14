@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { projects } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+const { project } = Astro.props;
+---
+
+<BaseLayout title={`${project.title} — Felix Klein`} description={project.description}>
+  <article class="project-detail">
+    <a class="back-link" href="/projects">← All projects</a>
+    <header class="project-detail-header">
+      <p class="eyebrow">{project.kicker}</p>
+      <h1>{project.title}</h1>
+      <p>{project.longDescription}</p>
+      <div class="meta-row">
+        <span>{project.year}</span>
+        <span>{project.status}</span>
+      </div>
+    </header>
+
+    <section class="detail-grid">
+      <div class="detail-block">
+        <h2>Why it matters</h2>
+        <ul>
+          {project.impact.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+      <div class="detail-block">
+        <h2>Stack</h2>
+        <div class="tag-row spacious">
+          {project.stack.map((item) => <span>{item}</span>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="detail-block wide">
+      <h2>Project links</h2>
+      <div class="hero-actions">
+        {project.repo && <a class="button primary" href={project.repo} target="_blank" rel="noreferrer">Repository</a>}
+        {project.demo && <a class="button ghost" href={project.demo} target="_blank" rel="noreferrer">Live / reference</a>}
+        {!project.repo && !project.demo && <p>Links can be added in <code>src/data/projects.ts</code>.</p>}
+      </div>
+    </section>
+  </article>
+</BaseLayout>

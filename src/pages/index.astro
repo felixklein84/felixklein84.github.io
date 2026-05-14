@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { featuredProjects } from '../data/projects';
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="hero-content">
+      <p class="eyebrow">Mathematics · AI · Robotics · Real-world systems</p>
+      <h1>Building clean models for messy systems.</h1>
+      <p class="hero-lead">
+        I work at the intersection of mathematical modelling, scientific computing, autonomous systems,
+        supply-chain analytics and digital business. My projects range from glioblastoma simulations and
+        multi-agent field operations to practical systems for a family winery.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="/projects">Explore projects</a>
+        <a class="button ghost" href="/cv">View CV</a>
+      </div>
+    </div>
+    <aside class="hero-panel" aria-label="Profile summary">
+      <div class="signal-card large">
+        <span class="signal-label">Core signal</span>
+        <strong>Mathematical thinking applied to real systems.</strong>
+      </div>
+      <div class="signal-grid">
+        <div class="signal-card"><span>01</span><strong>Scientific modelling</strong></div>
+        <div class="signal-card"><span>02</span><strong>Autonomous operations</strong></div>
+        <div class="signal-card"><span>03</span><strong>Data quality</strong></div>
+        <div class="signal-card"><span>04</span><strong>Digital business</strong></div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="section">
+    <SectionHeading
+      eyebrow="Selected work"
+      title="Projects that show the range"
+      text="A focused selection: research, robotics, education, supply chain and a real family business."
+    />
+    <div class="project-grid">
+      {featuredProjects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <section class="section split-section">
+    <div>
+      <p class="eyebrow">Positioning</p>
+      <h2>Not just another data profile.</h2>
+    </div>
+    <div class="rich-text">
+      <p>
+        My background is unusual on purpose: mathematics and stochastic modelling, physics and robotics interests,
+        hands-on supply-chain work, and direct responsibility for digital systems in a winery. The common thread is
+        simple: understand a complex system, reduce it to the right structure, and build something that works.
+      </p>
+      <p>
+        This portfolio is designed to make that visible without hiding behind buzzwords.
+      </p>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
