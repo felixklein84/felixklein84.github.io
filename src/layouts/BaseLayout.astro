@@ -1,0 +1,53 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Felix Klein — Mathematics, AI & real-world systems',
+  description = 'Personal portfolio of Felix Klein: mathematics, AI, scientific computing, robotics, supply-chain analytics and digital business systems.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="site-shell">
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="brand" href="/" aria-label="Felix Klein home">
+          <span class="brand-mark">FK</span>
+          <span>Felix Klein</span>
+        </a>
+        <div class="nav-links">
+          <a href="/projects">Projects</a>
+          <a href="/cv">CV</a>
+          <a href="mailto:felixklein84@gmail.com">Contact</a>
+          <a href="https://github.com/felixklein84" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+      </nav>
+      <main>
+        <slot />
+      </main>
+      <footer class="footer">
+        <p>© {new Date().getFullYear()} Felix Klein. Built with Astro and deployed on GitHub Pages.</p>
+        <div>
+          <a href="mailto:felixklein84@gmail.com">Email</a>
+          <a href="https://github.com/felixklein84" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

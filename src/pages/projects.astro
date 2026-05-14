@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { projects } from '../data/projects';
+---
+
+<BaseLayout title="Projects — Felix Klein">
+  <section class="page-hero compact">
+    <p class="eyebrow">Portfolio</p>
+    <h1>Selected projects</h1>
+    <p>
+      A curated overview of projects that combine mathematical modelling, simulation, operations,
+      teaching and digital product thinking.
+    </p>
+  </section>
+
+  <section class="section">
+    <SectionHeading eyebrow="Work" title="Case studies" />
+    <div class="project-grid">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+</BaseLayout>
