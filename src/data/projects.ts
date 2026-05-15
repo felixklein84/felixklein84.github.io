@@ -42,11 +42,12 @@ export const projects: Project[] = [
     description:
       'A multi-agent simulation for autonomous tractors coordinating plowing and seeding under realistic field geometry, timing constraints and operational dependencies.',
     longDescription:
-      'This project explores how multiple agricultural machines can coordinate field operations autonomously. Two slower tractors plow while a faster seeder may only enter already-prepared swaths. The system handles scheduling, collision avoidance, field geometry, boundary constraints and event-driven replanning. Built in Python with Shapely for geometry and NetworkX for path planning, the simulation produces animated visualisations of the full operation.',
+      'Built as part of my HiWi role at TUM’s Chair of Agricultural Mechatronics, this project explores how multiple agricultural machines can coordinate field operations autonomously. Two slower tractors plow while a faster seeder may only enter already-prepared swaths. The system handles scheduling, collision avoidance, field geometry, boundary constraints and event-driven replanning, connecting it to Controlled Traffic Farming and combinatorial route-allocation problems. Built in Python with Shapely for geometry and NetworkX for path planning; reproducible Sphinx documentation.',
     tags: ['Multi-Agent Systems', 'Robotics', 'Scheduling', 'GIS'],
-    status: 'Active simulation project',
+    status: 'Active research project · TUM HiWi',
     year: '2025–2026',
     repo: 'https://github.com/felixklein84',
+    image: '/images/projects/tractor-demo.gif',
     impact: [
       'Models real operational dependencies between heterogeneous machine types.',
       'Combines polygon geometry, graph search and discrete event simulation.',
