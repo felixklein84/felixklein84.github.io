@@ -9,6 +9,11 @@ const { project } = Astro.props;
 
 <article class="project-card">
   <a href={`/projects/${project.slug}`} class="project-card-link" aria-label={`Open ${project.title}`}>
+    {project.image && (
+      <div class="project-card-image">
+        <img src={project.image} alt={project.title} loading="lazy" />
+      </div>
+    )}
     <div class="project-card-topline">
       <span>{project.year}</span>
       <span>{project.status}</span>
