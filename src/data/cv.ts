@@ -4,7 +4,7 @@ export const profile = {
   location: 'Munich, Germany',
   email: 'felixklein84@gmail.com',
   github: 'https://github.com/felixklein84',
-  linkedin: 'https://linkedin.com/in/felixklein84',
+  linkedin: 'https://www.linkedin.com/in/felix-klein-007bba218/',
   winery: 'https://weingut-martin-klein.de',
 };
 
