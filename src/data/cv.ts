@@ -30,10 +30,13 @@ export const cvSections = [
   {
     title: 'Experience',
     items: [
-      'Deutsche Aircraft (2024–2025) — supply-chain automation, SAP data workflows, Power BI dashboards, supplier delivery-date visibility',
-      'KPMG (2023) — Data Science Consulting Intern: analytics, forecasting and AI-related workstreams',
-      'BMW (2022) — Logistics Internship: operational supply-chain processes and production planning exposure',
-      'Weingut Martin Klein (2020–present) — full digital build: WooCommerce, SEO, product data, photography, UX, B2B sales material',
+      'Deutsche Aircraft (02/2026–present) — Process Automation & Digitalisation: ERP/SupplyOn data-flow modelling, supplier delivery-date analytics and data-quality metrics for the D328eco serial production ramp-up',
+      'TUM · Chair of Agricultural Mechatronics (02/2026–present) — Research: Python simulation environment for collaborative multi-agent routing algorithms and combinatorial field-coverage optimisation',
+      'BMW Group R&I Centre (04–09/2025) — Engineering Operations & Data Analytics: demand-forecasting pipeline for prototype production, discrete-event warehouse simulation, CATIA V5 prototype cubing support',
+      'KPMG Lighthouse (09/2024–02/2025) — AI & Data Science Consulting: simulation backend optimisation (−25% runtime), Selenium/Azure DevOps CI automation, stochastic reserve forecasting in R',
+      'KombiRail Europe (03/2025) — Strategy & Financial Analysis: quantitative performance reporting and EUR 400k cost-saving scenarios for an M&A process',
+      'Cosuno Ventures (08/2021–09/2022) — Revenue Operations & Sales Analytics: HubSpot/VBA reporting automation, reducing KPI preparation from two days to three hours',
+      'Weingut Martin Klein (2015–present) — Digital Business: WooCommerce e-commerce build, SEO, web analytics, conversion optimisation and B2B sales materials',
     ],
   },
   {
