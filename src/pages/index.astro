@@ -1,383 +1,212 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import SectionHeading from '../components/SectionHeading.astro';
-import { featuredProjects } from '../data/projects';
-import { profile } from '../data/cv';
+import MicArray from '../components/MicArray.astro';
+import ProjectMedia from '../components/ProjectMedia.astro';
+import Entries from '../components/Entries.astro';
+import { featuredProjects, otherProjects } from '../data/projects';
+import { profile, now, experience, education, reading, offline } from '../data/cv';
 ---
 
 <BaseLayout>
-  <!-- ── HERO ──────────────────────────────────────────────────────────── -->
-  <section class="hero">
-    <div class="hero-content">
-      <p class="eyebrow">Mathematics · AI · Robotics · Real-world systems</p>
-      <h1>Building clean models for messy systems.</h1>
-      <p class="hero-lead">
-        I work at the intersection of mathematical modelling, scientific computing, autonomous
-        systems, supply-chain analytics and digital business. My projects range from glioblastoma
-        simulations and multi-agent field operations to practical systems for a family winery.
-      </p>
-      <div class="hero-actions">
-        <a class="button primary" href="/projects">View Projects</a>
-        <a class="button ghost" href="/cv/Felix_Klein_CV.pdf" target="_blank" download>Download CV</a>
-        <a class="button ghost icon-btn" href={profile.github} target="_blank" rel="noreferrer">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
-          GitHub
-        </a>
-        <a class="button ghost icon-btn" href={profile.linkedin} target="_blank" rel="noreferrer">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-          </svg>
-          LinkedIn
-        </a>
-      </div>
-    </div>
-    <aside class="hero-photo-panel" aria-label="Profile photo">
-      <div class="hero-photo-wrap">
-        <img src="/images/felix.jpg" alt="Felix Klein" class="hero-photo" />
-      </div>
-      <div class="hero-meta-cards">
-        <div class="meta-chip">
-          <span class="meta-chip-label">Based in</span>
-          <strong>Munich, Germany</strong>
-        </div>
-        <div class="meta-chip">
-          <span class="meta-chip-label">Background</span>
-          <strong>Business Mathematics, Uni Mannheim</strong>
-        </div>
-        <div class="meta-chip accent">
-          <span class="meta-chip-label">Focus</span>
-          <strong>Mathematical modelling · AI · Robotics</strong>
-        </div>
-      </div>
-    </aside>
-  </section>
-
-  <!-- ── ABOUT ──────────────────────────────────────────────────────────── -->
-  <section class="section about-section" id="about">
-    <div class="about-grid">
-      <div class="about-text">
-        <p class="eyebrow">About</p>
-        <h2>Not just another data profile.</h2>
-        <p>
-          I completed a B.Sc. in Business Mathematics at the University of Mannheim (2020–2024) with
-          a focus on stochastic processes, numerical analysis, optimisation and scientific programming.
-          My bachelor thesis modelled glioblastoma cell dynamics and therapy effects using continuous-time
-          Markov chains — the project that crystallised my interest in applying rigorous mathematical
-          structure to complex real-world systems.
+  <section class="hero" aria-labelledby="hero-name">
+    <h1 class="hero-name" id="hero-name">Felix Klein</h1>
+    <div class="hero-grid">
+      <div class="hero-text">
+        <p class="hero-lead">
+          I study <strong>Robotics, Cognition &amp; Intelligence at TUM</strong>, coming from mathematics. I work on
+          machines that have to make sense of the real world: autonomous tractors sharing a field, a microcontroller
+          that hears where a siren is, and a robot that should find leaks in a factory.
         </p>
         <p>
-          I'm now extending that profile with a second B.Sc. in Physics at TUM, alongside HiWi work
-          at the Chair of Agricultural Mechatronics on collaborative multi-agent routing for autonomous
-          field operations. In parallel I work as a Working Student at Deutsche Aircraft on supply chain
-          and digitalisation for the D328eco ramp-up, after internships at BMW R&I, KPMG Lighthouse,
-          KombiRail and Cosuno — and an exchange semester in Sydney.
+          My tools are stochastic models, simulation and code that runs on actual hardware. Before robotics I worked
+          on data and automation at BMW, KPMG and Deutsche Aircraft, and I still run the digital side of my family’s
+          winery.
         </p>
-        <p>
-          The thread: understand a complex system, reduce it to the right mathematical structure, and
-          build something that works. Target master's programmes: Applied & Engineering Physics, Robotics
-          Cognition & Intelligence, or comparable.
-        </p>
-      </div>
-      <div class="about-signals">
-        <div class="signal-card">
-          <span>Scientific computing</span>
-          <strong>Stochastic processes, Markov chains, simulation, numerical analysis</strong>
-        </div>
-        <div class="signal-card">
-          <span>Autonomous systems</span>
-          <strong>Multi-agent scheduling, robotics, field operations, GIS</strong>
-        </div>
-        <div class="signal-card">
-          <span>Applied analytics</span>
-          <strong>Supply-chain data quality, SAP, Power BI, process automation</strong>
-        </div>
-        <div class="signal-card accent">
-          <span>Digital business</span>
-          <strong>E-commerce, UX, SEO, product data — for a real family winery</strong>
+        <div class="actions">
+          <a class="btn primary" href="/projects">See my work</a>
+          <a class="btn" href="/cv">Read my CV</a>
+          <a class="btn" href={`mailto:${profile.email}`}>Email me</a>
         </div>
       </div>
+      <ul class="hero-facts">
+          <li><span>Studying</span><span>M.Sc. Robotics, Cognition &amp; Intelligence, TUM</span></li>
+          <li><span>Research</span><span>Multi-agent routing for field robots, TUM Agricultural Mechatronics</span></li>
+          <li><span>Background</span><span>B.Sc. Business Mathematics, Mannheim; exchange in Sydney</span></li>
+          <li><span>Based in</span><span>Munich, open to research stays abroad</span></li>
+      </ul>
+      <MicArray />
     </div>
   </section>
 
-  <!-- ── PROJECTS ───────────────────────────────────────────────────────── -->
-  <section class="section" id="projects">
-    <SectionHeading
-      eyebrow="Selected work"
-      title="Projects that show the range"
-      text="A focused selection: research, robotics, education, supply chain and a real family business."
-    />
-    <div class="project-grid">
-      {featuredProjects.map((project) => <ProjectCard project={project} />)}
-    </div>
-    <div class="section-cta">
-      <a class="button primary" href="/projects">All projects</a>
+  <section class="sec" aria-labelledby="now">
+    <header>
+      <h2 id="now">Now</h2>
+      <p>As of {now.asOf}</p>
+    </header>
+    <div class="sec-body">
+      <ul class="now-list">
+        {
+          now.items.map((n) => (
+            <li>
+              {n.href ? (
+                <a class="now-what" href={n.href}>
+                  {n.what}
+                </a>
+              ) : (
+                <span class="now-what">{n.what}</span>
+              )}
+              <span class="now-detail">{n.detail}</span>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 
-  <!-- ── EDUCATION ─────────────────────────────────────────────────────── -->
-  <section class="section" id="education">
-    <SectionHeading
-      eyebrow="Education"
-      title="Academic foundation"
-      text="Grounded in mathematics and shaped by international exposure."
-    />
-    <div class="timeline">
-      <div class="timeline-item">
-        <div class="timeline-year">10/2025 — exp. 10/2026</div>
-        <div class="timeline-body">
-          <h3>B.Sc. Physik</h3>
-          <p class="timeline-place">Technical University of Munich (TUM)</p>
+  <section class="sec" aria-labelledby="work">
+    <header>
+      <h2 id="work">Selected work</h2>
+      <p>Each project links to a write-up of the problem, the approach and what came out of it.</p>
+    </header>
+    <div class="sec-body">
+      <div class="work">
+        {
+          featuredProjects.map((p) => (
+            <article class="work-item">
+              {p.media && (
+                <div class="work-media">
+                  <ProjectMedia media={p.media} />
+                </div>
+              )}
+              <div>
+                <p class="work-meta">
+                  <span>{p.domain}</span>
+                  <span>{p.year}</span>
+                </p>
+                <h3>
+                  <a href={`/projects/${p.slug}`}>{p.title}</a>
+                </h3>
+                <p>{p.summary}</p>
+                <a class="sans small" href={`/projects/${p.slug}`} aria-label={`Read more: ${p.title}`}>
+                  Read the write-up
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <h3 class="more-heading">More projects</h3>
+      <ul class="rows">
+        {
+          otherProjects.map((p) => (
+            <li>
+              <a href={`/projects/${p.slug}`}>
+                <span class="rows-title">{p.title}</span>
+                <span class="rows-domain">{p.domain}</span>
+                <span class="rows-year">{p.year}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="help">
+    <header>
+      <h2 id="help">Working together</h2>
+    </header>
+    <div class="sec-body">
+      <div class="paths">
+        <div>
+          <h3>Robotics and AI teams</h3>
           <p>
-            Second degree pursued to extend a mathematics-based analytical profile towards technical, computational and biophysical research. Focus: simulation, dynamics, applied physics. Preparation for graduate study in Applied & Engineering Physics, ESPACE, or Robotics, Cognition & Intelligence.
+            I’m looking for internships and working-student roles in startups building robots that leave the lab:
+            perception, planning, simulation. I bring mathematics, fast prototyping (2nd place at the ChefTreff
+            hackathon 2024) and industry experience from BMW, KPMG and Deutsche Aircraft.
           </p>
-          <div class="tag-row spacious">
-            <span>Applied Physics</span><span>Simulation</span><span>Robotics</span><span>Dynamics</span>
-          </div>
+          <a href="/cv">CV and experience</a>
         </div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-year">09/2020 — 09/2024</div>
-        <div class="timeline-body">
-          <h3>B.Sc. Business Mathematics</h3>
-          <p class="timeline-place">University of Mannheim · Final grade 2.3</p>
+        <div>
+          <h3>Research groups abroad</h3>
           <p>
-            Core: Markov chains, stochastic processes, dynamical systems, numerical methods, optimisation, scientific programming. Bachelor thesis: <em>Mathematical Brain Tumour Modelling Using the Example of Glioblastoma — Analysis of Cell Dynamics and Therapy Effects with Continuous-Time Markov Chains</em>.
+            I’m planning an exchange semester and a research internship abroad as part of my master’s. My interests:
+            multi-robot coordination, acoustic and embedded perception, and stochastic models of systems under
+            uncertainty.
           </p>
-          <div class="tag-row spacious">
-            <span>Stochastic Processes</span><span>Markov Chains</span><span>Numerical Analysis</span><span>Optimisation</span><span>Python</span>
-          </div>
+          <a href="/projects">Research projects</a>
         </div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-year">07/2023 — 02/2024</div>
-        <div class="timeline-body">
-          <h3>Exchange Semester</h3>
-          <p class="timeline-place">Western Sydney University, Australia · Grade 1.7</p>
+        <div>
+          <h3>Small businesses and wineries</h3>
           <p>
-            Coursework in Machine Learning, Data Science and Mathematical Modeling. Project work on convolutional neural networks for image classification and feature-map visualisation using PyTorch.
+            Next to my studies I take on a few projects building websites, shops and automations for small
+            businesses, especially wineries. I know the trade from the inside.
           </p>
-          <div class="tag-row spacious">
-            <span>Machine Learning</span><span>PyTorch</span><span>CNNs</span><span>Data Science</span>
-          </div>
-        </div>
-      </div>
-      <div class="timeline-item future">
-        <div class="timeline-year">Target</div>
-        <div class="timeline-body">
-          <h3>M.Sc. — Applied Physics / Robotics / Engineering Physics</h3>
-          <p class="timeline-place">TUM (Robotics, Cognition & Intelligence · ESPACE · AEP) · or similar</p>
-          <p>
-            Current focus: deepening capabilities in control systems, autonomous systems, computational and biophysical modelling. Target master's programmes at TUM and comparable institutions.
-          </p>
-          <div class="tag-row spacious">
-            <span>Robotics</span><span>Applied Physics</span><span>Engineering</span><span>AI / ML</span>
-          </div>
+          <a href="/services" hreflang="de">Angebot auf Deutsch</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── EXPERIENCE ────────────────────────────────────────────────────── -->
-  <section class="section" id="experience">
-    <SectionHeading
-      eyebrow="Experience"
-      title="Where the work happened"
-      text="Across aerospace, consulting, automotive and a family business."
-    />
-    <div class="exp-grid">
-      <div class="exp-card">
-        <div class="exp-header">
-          <span class="exp-year">02/2026 — present</span>
-          <span class="exp-tag">HiWi · TUM</span>
-        </div>
-        <h3>TUM · Chair of Agricultural Mechatronics</h3>
-        <p class="exp-role">Student Research Assistant — Collaborative Routing & Simulation</p>
-        <p>
-          Research on collaborative multi-agent routing and Controlled Traffic Farming as a combinatorial
-          optimisation problem. Built a Python simulation environment for evaluating route-allocation and
-          consensus algorithms on realistic agricultural field graphs, plus performance evaluation of
-          collaborative routing heuristics with reproducible Sphinx documentation.
-        </p>
-        <div class="tag-row spacious">
-          <span>Multi-Agent Systems</span><span>Robotics</span><span>Python</span><span>Optimisation</span><span>Sphinx</span>
-        </div>
-      </div>
+  <section class="sec" aria-labelledby="experience">
+    <header>
+      <h2 id="experience">Experience</h2>
+    </header>
+    <div class="sec-body">
+      <Entries entries={experience} />
+    </div>
+  </section>
 
-      <div class="exp-card">
-        <div class="exp-header">
-          <span class="exp-year">02/2026 — present</span>
-          <span class="exp-tag">Working Student</span>
-        </div>
-        <h3>Deutsche Aircraft</h3>
-        <p class="exp-role">Process Automation & Digitalisation — Oberpfaffenhofen</p>
-        <p>
-          Modelling and optimisation of data flows between ERP and the SupplyOn supplier platform for
-          the serial production ramp-up of the D328eco. Identifying systematic bottlenecks in supplier
-          communication and building quantitative metrics for data quality, order confirmations and
-          delivery-date reliability.
-        </p>
-        <div class="tag-row spacious">
-          <span>SAP / ERP</span><span>SupplyOn</span><span>Power BI</span><span>Python</span><span>Aerospace</span>
-        </div>
-      </div>
+  <section class="sec" aria-labelledby="education">
+    <header>
+      <h2 id="education">Education</h2>
+    </header>
+    <div class="sec-body">
+      <Entries entries={education} />
+    </div>
+  </section>
 
-      <div class="exp-card">
-        <div class="exp-header">
-          <span class="exp-year">04/2025 — 09/2025</span>
-          <span class="exp-tag">Internship</span>
+  <section class="sec" aria-labelledby="offline">
+    <header>
+      <h2 id="offline">Off the clock</h2>
+    </header>
+    <div class="sec-body">
+      <div class="offline">
+        <div>
+          <p class="label">Reading now</p>
+          <p class="book-now">{reading.now.title}</p>
+          <p class="muted">{reading.now.author}</p>
+          <p class="label" style="margin-top: 24px">Books I keep coming back to</p>
+          <ul class="books">
+            {
+              reading.favourites.map((b) => (
+                <li>
+                  <i>{b.title}</i> <span class="muted">by {b.author}</span>
+                </li>
+              ))
+            }
+          </ul>
         </div>
-        <h3>BMW Group · Research & Innovation Centre</h3>
-        <p class="exp-role">Engineering Operations & Data Analytics — Munich</p>
-        <p>
-          Built a forecasting pipeline for axle-assembly demand in prototype production using Python
-          time-series modelling and Power BI. Designed a discrete-event simulation of warehouse utilisation
-          at the Parsdorf supply centre, quantifying bottlenecks in inventory and disposal logistics.
-          Supported NA0 prototype cubing through CATIA V5 and tolerance analysis.
-        </p>
-        <div class="tag-row spacious">
-          <span>Python</span><span>Forecasting</span><span>Discrete-Event Sim</span><span>CATIA V5</span><span>Power BI</span>
-        </div>
-      </div>
-
-      <div class="exp-card">
-        <div class="exp-header">
-          <span class="exp-year">09/2024 — 02/2025</span>
-          <span class="exp-tag">Internship</span>
-        </div>
-        <h3>KPMG · Lighthouse</h3>
-        <p class="exp-role">Data Science Consulting — Saarbrücken</p>
-        <p>
-          Extended the Python backend of a simulation software with numerical analysis modules;
-          vectorisation and caching reduced runtime of complex scenarios by ≈25%. Automated UI
-          regression tests for an Angular frontend with Selenium and integrated them into a
-          Git/Azure DevOps CI pipeline (≈50% less manual testing per sprint). Refactored and
-          optimised R scripts for stochastic reserve forecasting.
-        </p>
-        <div class="tag-row spacious">
-          <span>Python</span><span>R</span><span>Selenium</span><span>Azure DevOps</span><span>Numerical Methods</span>
-        </div>
-      </div>
-
-      <div class="exp-card">
-        <div class="exp-header">
-          <span class="exp-year">03/2025</span>
-          <span class="exp-tag">Internship</span>
-        </div>
-        <h3>KombiRail Europe B.V.</h3>
-        <p class="exp-role">Strategy & Financial Analysis — Frankfurt</p>
-        <p>
-          Prepared quantitative analyses of operational and financial performance indicators for
-          senior management. Modelled cost-saving scenarios of approximately EUR 400k p.a. as
-          decision support for an M&A-related process.
-        </p>
-        <div class="tag-row spacious">
-          <span>Financial Modelling</span><span>Excel</span><span>M&A</span><span>Rail Freight</span>
-        </div>
-      </div>
-
-      <div class="exp-card">
-        <div class="exp-header">
-          <span class="exp-year">08/2021 — 09/2022</span>
-          <span class="exp-tag">Working Student</span>
-        </div>
-        <h3>Cosuno Ventures GmbH</h3>
-        <p class="exp-role">Revenue Operations & Sales Analytics — Berlin</p>
-        <p>
-          Designed automated reporting workflows using HubSpot, Excel/VBA and data-cleaning routines —
-          reducing KPI report preparation from two days to three hours. Supported weekly data-driven
-          management updates and operational sales controlling in a venture-backed construction-tech
-          start-up.
-        </p>
-        <div class="tag-row spacious">
-          <span>HubSpot</span><span>VBA</span><span>Sales Ops</span><span>Reporting</span><span>Start-up</span>
-        </div>
-      </div>
-
-      <div class="exp-card accent">
-        <div class="exp-header">
-          <span class="exp-year">01/2015 — present</span>
-          <span class="exp-tag">Ongoing</span>
-        </div>
-        <h3>Weingut Martin Klein</h3>
-        <p class="exp-role">Family Winery — Digitalization, E-Commerce & SEO</p>
-        <p>
-          Long-term hands-on contribution across operations, sales and customer service. Built and
-          maintained the e-commerce and digital-marketing channel using WooCommerce, SEO, web analytics
-          and conversion-data evaluation.
-        </p>
-        <div class="tag-row spacious">
-          <span>WooCommerce</span><span>SEO</span><span>UX</span><span>Web Analytics</span><span>Operations</span>
-        </div>
-      </div>
-
-      <div class="exp-card">
-        <div class="exp-header">
-          <span class="exp-year">05/2025 — present</span>
-          <span class="exp-tag">Initiative</span>
-        </div>
-        <h3>HORYZN · Student Aerospace Initiative</h3>
-        <p class="exp-role">Aerostructures Team — Landing Gear (TUM)</p>
-        <p>
-          Development and optimisation of landing-gear concepts for autonomous aircraft prototypes.
-          Analysing landing stability, shock absorption, structural constraints and manufacturability;
-          supporting CAD prototyping and interdisciplinary aerospace design work.
-        </p>
-        <div class="tag-row spacious">
-          <span>CAD</span><span>Structural Analysis</span><span>Aerospace</span><span>Prototyping</span>
-        </div>
+        <ul>
+          {offline.map((o) => <li>{o}</li>)}
+        </ul>
       </div>
     </div>
   </section>
 
-  <!-- ── CONTACT ───────────────────────────────────────────────────────── -->
-  <section class="section contact-section" id="contact">
-    <SectionHeading
-      eyebrow="Contact"
-      title="Get in touch"
-      text="Open to master's programme applications, research collaborations and interesting engineering problems."
-    />
-    <div class="contact-grid">
-      <a class="contact-card" href={`mailto:${profile.email}`}>
-        <span class="contact-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-            <rect x="2" y="4" width="20" height="16" rx="2"/>
-            <path d="m2 7 10 7 10-7"/>
-          </svg>
-        </span>
-        <span class="contact-label">Email</span>
-        <span class="contact-value">{profile.email}</span>
-      </a>
-      <a class="contact-card" href={profile.github} target="_blank" rel="noreferrer">
-        <span class="contact-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
-        </span>
-        <span class="contact-label">GitHub</span>
-        <span class="contact-value">felixklein84</span>
-      </a>
-      <a class="contact-card" href={profile.linkedin} target="_blank" rel="noreferrer">
-        <span class="contact-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-          </svg>
-        </span>
-        <span class="contact-label">LinkedIn</span>
-        <span class="contact-value">Felix Klein</span>
-      </a>
-      <a class="contact-card" href="https://weingut-martin-klein.de" target="_blank" rel="noreferrer">
-        <span class="contact-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
-          </svg>
-        </span>
-        <span class="contact-label">Winery</span>
-        <span class="contact-value">weingut-martin-klein.de</span>
-      </a>
+  <section class="sec" id="contact" aria-labelledby="contact-h">
+    <header>
+      <h2 id="contact-h">Contact</h2>
+    </header>
+    <div class="sec-body">
+      <p>The fastest way to reach me is email. I answer in English or German.</p>
+      <a class="contact-mail" href={`mailto:${profile.email}`}>{profile.email}</a>
+      <div class="contact-links">
+        <a href={profile.github} rel="me">GitHub</a>
+        <a href={profile.linkedin} rel="me">LinkedIn</a>
+        <a href="/cv">CV</a>
+      </div>
     </div>
   </section>
 </BaseLayout>

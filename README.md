@@ -1,56 +1,51 @@
-# Felix Klein — Personal Portfolio
+# felixklein84.github.io
 
-Astro-based personal portfolio for `felixklein84.github.io`.
+Personal site of Felix Klein: robotics, mathematics and the projects in between.
+Built with [Astro](https://astro.build), deployed to GitHub Pages by GitHub Actions on every push to `main`.
 
-## Local setup
-
-```bash
-npm install
-npm run dev
-```
-
-Open the local URL Astro prints in the terminal.
-
-## Deploy on GitHub Pages
-
-1. Create a public repository named exactly:
-
-```text
-felixklein84.github.io
-```
-
-2. Push this project:
+## Run locally
 
 ```bash
-git init
-git add .
-git commit -m "Initial portfolio website"
-git branch -M main
-git remote add origin https://github.com/felixklein84/felixklein84.github.io.git
-git push -u origin main
+npm ci
+npm run dev       # http://localhost:4321
+npm run build     # type-check + static build into dist/
 ```
 
-3. In GitHub: `Settings → Pages → Build and deployment → Source → GitHub Actions`.
+## Where the content lives
 
-The workflow in `.github/workflows/deploy.yml` builds and deploys the site automatically on every push to `main`.
+| What | File |
+| --- | --- |
+| Profile, "Now" list, experience, education, engagement, skills, books | `src/data/cv.ts` |
+| Projects (problem, approach, result, media, links) | `src/data/projects.ts` |
+| Start page layout | `src/pages/index.astro` |
+| German services page for businesses | `src/pages/services.astro` |
+| Printable CV (browser "Save as PDF") | `src/pages/cv.astro` |
+| Design tokens and all styles | `src/styles/global.css` |
+| Interactive microphone-array hero | `src/components/MicArray.astro` |
+| SVG project diagrams | `src/components/Diagram.astro` |
 
-## Edit content
+Keep the **Now** list in `src/data/cv.ts` current and update its `asOf` date when you change it.
 
-- Main project data: `src/data/projects.ts`
-- CV data: `src/data/cv.ts`
-- Global styling: `src/styles/global.css`
-- Pages: `src/pages/`
+### Adding a project
 
-## CV PDF
+Add an entry to `projects` in `src/data/projects.ts`. Set `featured: true` to show it with media on the start page.
+`media` can be an image (`public/images/projects/…`), a looping video (`public/media/…`, MP4 with a poster JPG) or one of the
+built-in diagrams. Convert GIFs to MP4 before adding them:
 
-Put your public CV PDF here:
-
-```text
-public/cv/Felix_Klein_CV.pdf
+```bash
+ffmpeg -i demo.gif -vf "scale=1200:-2,format=yuv420p" -movflags +faststart -c:v libx264 -crf 25 public/media/demo.mp4
 ```
 
-The CV page already links to this path. Avoid publishing private address or phone number.
+## Privacy
 
-## Notes
+Do not commit a CV with home address or phone number to `public/`. Everything in `public/` is world-readable,
+and files stay in the git history after deletion.
 
-This repository is configured as a user site, so `astro.config.mjs` uses `site: 'https://felixklein84.github.io'` and does **not** set `base`. Only add `base` if you deploy from a normal project repository instead of `felixklein84.github.io`.
+## Design
+
+- Type: Archivo (expanded width for headlines) and Source Serif 4 for reading text, both self-hosted via Fontsource,
+  so no requests go to Google.
+- Colour: paper `#f3f4f0`, ink `#17212b`, slate `#56616c`, vine `#4e6a14`, lime `#c9dc6a` (on ink only), amber `#f0a43a`
+  (sound source only).
+- Layout: margin headings on the left, content on the right; single column below 960 px.
+- Motion: only the hero simulation animates, and it renders a static frame under `prefers-reduced-motion`.
