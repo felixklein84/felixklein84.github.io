@@ -28,6 +28,10 @@ export const now = {
       href: '/projects/compressed-air-leak-detection',
     },
     {
+      what: 'Back to teach at MS Memorial Khatoli School in India',
+      detail: 'Four weeks in November, continuing the English, digital-skills and Python classes I started there in 2025.',
+    },
+    {
       what: 'Working student at Deutsche Aircraft',
       detail: 'Supplier data and process automation for the D328eco production ramp-up.',
     },
@@ -170,10 +174,10 @@ export const engagement: Entry[] = [
     points: ['Matching algorithm for duplicate financial transactions using fuzzy hashing and feature engineering.'],
   },
   {
-    when: '08/2025 – 09/2025',
+    when: '08/2025 – 09/2025, 11/2026',
     title: 'Volunteer teacher',
-    org: 'High school in Jaipur',
-    place: 'India',
+    org: 'MS Memorial Khatoli School',
+    place: 'Rajasthan, India',
     points: [
       'Designed and taught an “English for job interviews” course for grades 10–12, with mock interviews.',
       'Digital literacy and AI module: students wrote CVs, used generative AI for guided research and built small projects.',
@@ -215,8 +219,8 @@ export const reading = {
 };
 
 export const offline = [
-  'Snowboard instructor on the JuSki trip each winter, and I design its yearly logo and merch.',
-  'Taught English for job interviews, digital skills and Python in India.',
+  'Snowboarding. Until 2025 I was an instructor on the JuSki youth trip.',
+  'Teaching English for job interviews, digital skills and Python at a school in Rajasthan, India.',
   'Half-marathons, calisthenics, surfing when I can.',
   'Making things by hand: restoring an old wine barrel, forging a ring, a goldsmithing course, and filming all of it.',
 ];

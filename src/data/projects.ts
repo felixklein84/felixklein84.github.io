@@ -187,10 +187,10 @@ export const projects: Project[] = [
     slug: 'python-course',
     title: 'Teaching Python in India',
     summary:
-      'A seven-session course that takes complete beginners from first variables to interactive data dashboards, taught in India and published for self-study.',
+      'A seven-session course that takes complete beginners from first variables to interactive data dashboards, taught at MS Memorial Khatoli School in India and published for self-study.',
     domain: 'Teaching',
     year: '2025–26',
-    role: 'Course author and instructor',
+    role: 'Course author and volunteer teacher, MS Memorial Khatoli School',
     status: 'Taught · open material',
     problem:
       'Many students had little prior contact with computers. A syntax-first course would have lost them in the first week; they needed to see early what code can do with real data.',
@@ -201,7 +201,10 @@ export const projects: Project[] = [
     ],
     outcome: ['A complete, reusable course published on GitHub.'],
     stack: ['Python', 'Jupyter', 'pandas', 'Plotly', 'Dash', 'Poetry'],
-    links: [{ label: 'Course material', href: 'https://github.com/felixklein84/python-course' }],
+    links: [
+      { label: 'Course material', href: 'https://github.com/felixklein84/python-course' },
+      { label: 'MS Memorial Khatoli School', href: 'https://www.khatolischool-india.org' },
+    ],
   },
   {
     slug: 'winery-digital-system',
