@@ -16,7 +16,7 @@ const {
   title = 'Felix Klein · Robotics, mathematics, real systems',
   description = 'Felix Klein studies Robotics, Cognition & Intelligence at TUM. Mathematics background, research on autonomous field robots, embedded acoustic perception and stochastic simulation.',
   lang = 'en',
-  image = '/images/felix.jpg',
+  image = '/og/felix-klein.png',
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? profile.site).href;
@@ -72,7 +72,11 @@ const person = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Felix Klein, M.Sc. Robotics, Cognition & Intelligence, TUM Munich" />
+    <meta property="og:site_name" content="Felix Klein" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(person)} />
   </head>
