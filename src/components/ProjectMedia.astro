@@ -1,0 +1,29 @@
+---
+import type { Media } from '../data/projects';
+import Diagram from './Diagram.astro';
+
+interface Props {
+  media: Media;
+  eager?: boolean;
+}
+const { media, eager = false } = Astro.props;
+---
+
+{media.kind === 'image' && <img src={media.src} alt={media.alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />}
+{
+  media.kind === 'video' && (
+    <video src={media.src} poster={media.poster} autoplay muted loop playsinline preload="metadata" aria-label={media.alt} data-motion-video />
+  )
+}
+{media.kind === 'diagram' && <Diagram name={media.name} alt={media.alt} />}
+
+<script>
+  // Respect reduced motion: show the poster frame instead of looping video.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll<HTMLVideoElement>('video[data-motion-video]').forEach((v) => {
+      v.removeAttribute('autoplay');
+      v.pause();
+      v.controls = true;
+    });
+  }
+</script>

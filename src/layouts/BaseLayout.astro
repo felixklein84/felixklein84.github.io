@@ -1,55 +1,104 @@
 ---
+import '@fontsource-variable/archivo/standard.css';
+import '@fontsource-variable/source-serif-4/opsz.css';
+import '@fontsource-variable/source-serif-4/opsz-italic.css';
 import '../styles/global.css';
+import { profile } from '../data/cv';
 
 interface Props {
   title?: string;
   description?: string;
+  lang?: 'en' | 'de';
+  image?: string;
 }
 
 const {
-  title = 'Felix Klein — Mathematics, AI & real-world systems',
-  description = 'Personal portfolio of Felix Klein: mathematics, AI, scientific computing, robotics, supply-chain analytics and digital business systems.',
+  title = 'Felix Klein · Robotics, mathematics, real systems',
+  description = 'Felix Klein studies Robotics, Cognition & Intelligence at TUM. Mathematics background, research on autonomous field robots, embedded acoustic perception and stochastic simulation.',
+  lang = 'en',
+  image = '/images/felix.jpg',
 } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? profile.site).href;
+const ogImage = new URL(image, Astro.site ?? profile.site).href;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+
+const nav =
+  lang === 'de'
+    ? [
+        { href: '/projects', label: 'Projekte' },
+        { href: '/cv', label: 'Lebenslauf' },
+        { href: '/services', label: 'Für Betriebe' },
+        { href: '/#contact', label: 'Kontakt' },
+      ]
+    : [
+        { href: '/projects', label: 'Work' },
+        { href: '/cv', label: 'CV' },
+        { href: '/services', label: 'Services' },
+        { href: '/#contact', label: 'Contact' },
+      ];
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  url: profile.site,
+  image: ogImage,
+  email: `mailto:${profile.email}`,
+  jobTitle: 'M.Sc. student, Robotics, Cognition & Intelligence',
+  affiliation: { '@type': 'CollegeOrUniversity', name: 'Technical University of Munich' },
+  alumniOf: [
+    { '@type': 'CollegeOrUniversity', name: 'University of Mannheim' },
+    { '@type': 'CollegeOrUniversity', name: 'Western Sydney University' },
+  ],
+  address: { '@type': 'PostalAddress', addressLocality: 'Munich', addressCountry: 'DE' },
+  knowsAbout: ['Robotics', 'Multi-agent planning', 'Acoustic localisation', 'Stochastic processes', 'Simulation', 'Machine learning'],
+  sameAs: [profile.github, profile.linkedin],
+};
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#f3f4f0" />
+    <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <title>{title}</title>
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(person)} />
   </head>
   <body>
-    <div class="site-shell">
-      <nav class="nav" aria-label="Primary navigation">
-        <a class="brand" href="/" aria-label="Felix Klein home">
-          <span class="brand-mark"><img src="/images/felix.jpg" alt="Felix Klein" /></span>
-          <span>Felix Klein</span>
-        </a>
-        <div class="nav-links">
-          <a href="/#about">About</a>
-          <a href="/projects">Projects</a>
-          <a href="/cv">CV</a>
-          <a href="/#contact">Contact</a>
-          <a href="https://github.com/felixklein84" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="https://www.linkedin.com/in/felix-klein-007bba218/" target="_blank" rel="noreferrer">LinkedIn</a>
-        </div>
-      </nav>
-      <main>
+    <a class="skip" href="#main">{lang === 'de' ? 'Zum Inhalt' : 'Skip to content'}</a>
+    <div class="wrap">
+      <header class="nav">
+        <a class="nav-home" href="/">Felix Klein</a>
+        <nav class="nav-links" aria-label={lang === 'de' ? 'Hauptnavigation' : 'Main'}>
+          {nav.map((l) => (
+            <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>
+              {l.label}
+            </a>
+          ))}
+        </nav>
+      </header>
+      <main id="main">
         <slot />
       </main>
       <footer class="footer">
-        <p>© {new Date().getFullYear()} Felix Klein. Built with Astro and deployed on GitHub Pages.</p>
-        <div>
-          <a href="mailto:felixklein84@gmail.com">Email</a>
-          <a href="https://github.com/felixklein84" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="https://www.linkedin.com/in/felix-klein-007bba218/" target="_blank" rel="noreferrer">LinkedIn</a>
-        </div>
+        <span>© {new Date().getFullYear()} Felix Klein, Munich</span>
+        <nav aria-label="Elsewhere">
+          <a href={`mailto:${profile.email}`}>Email</a>
+          <a href={profile.github} rel="me">GitHub</a>
+          <a href={profile.linkedin} rel="me">LinkedIn</a>
+        </nav>
       </footer>
     </div>
   </body>
