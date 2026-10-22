@@ -2,11 +2,13 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Not found — Felix Klein">
-  <section class="page-hero compact">
-    <p class="eyebrow">404</p>
-    <h1>Page not found.</h1>
-    <p>This route does not exist yet.</p>
-    <a class="button primary" href="/">Back home</a>
-  </section>
+<BaseLayout title="Page not found · Felix Klein">
+  <header class="page-head">
+    <h1>This page doesn’t exist</h1>
+    <p class="lead">The link may be from an older version of this site. Everything current is on the start page.</p>
+    <div class="actions">
+      <a class="btn primary" href="/">Go to the start page</a>
+      <a class="btn" href="/projects">See all work</a>
+    </div>
+  </header>
 </BaseLayout>

@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { profile } from '../data/cv';
+
+const mail = `mailto:${profile.email}?subject=${encodeURIComponent('Anfrage Website / Automatisierung')}`;
+---
+
+<BaseLayout
+  lang="de"
+  title="Websites & Automatisierung für Weingüter und kleine Betriebe · Felix Klein"
+  description="Felix Klein baut Websites, Onlineshops und Automatisierungen für Weingüter und kleine Betriebe: WooCommerce, saubere Produktdaten, Sichtbarkeit bei Google und in KI-Suchen, weniger Handarbeit im Büro."
+>
+  <header class="page-head">
+    <h1>Websites und Automatisierung für Weingüter und kleine Betriebe</h1>
+    <p class="lead">
+      Ich bin im Weingut meiner Familie im Rheingau groß geworden und betreue dort seit Jahren Shop, Website und
+      Drucksachen. Hauptberuflich studiere ich Robotik an der TU München. Daneben übernehme ich ein paar Projekte im
+      Jahr für Betriebe, die eine ordentliche Website wollen, aber keine Agentur brauchen.
+    </p>
+    <div class="actions">
+      <a class="btn primary" href={mail}>Projekt anfragen</a>
+      <a class="btn" href="#referenz">Referenz ansehen</a>
+    </div>
+  </header>
+
+  <section class="sec" aria-labelledby="angebot">
+    <header><h2 id="angebot">Was ich mache</h2></header>
+    <div class="sec-body">
+      <ul class="offer">
+        <li>
+          <h3>Website und Onlineshop</h3>
+          <p>
+            WordPress und WooCommerce, gepflegt mit Elementor, damit Sie Texte und Preise selbst ändern können. Für
+            Weingüter mit Weindaten, die man filtern kann: Rebsorte, Lage, Jahrgang, Geschmack.
+          </p>
+        </li>
+        <li>
+          <h3>Gefunden werden</h3>
+          <p>
+            Google-Unternehmensprofil, saubere Seitentitel und strukturierte Daten nach schema.org. So verstehen Google
+            und KI-Suchen wie ChatGPT, welche Weine Sie haben, wann die Straußwirtschaft offen ist und wo man parkt.
+          </p>
+        </li>
+        <li>
+          <h3>Weniger Handarbeit</h3>
+          <p>
+            Bestellungen, Preislisten, Excel-Listen, Auswertungen: Was jede Woche gleich abläuft, lässt sich oft
+            automatisieren. Bei einem Start-up habe ich so ein Reporting von zwei Tagen auf drei Stunden gebracht.
+          </p>
+        </li>
+        <li>
+          <h3>Einheitlicher Auftritt</h3>
+          <p>
+            Ein kurzer Styleguide mit Farben, Schriften und Logo-Regeln, der für Website, Etikett, Preisliste und Flyer
+            gleichermaßen gilt. Plus QR-Code auf eine Seite, die wirklich weiterhilft.
+          </p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="referenz">
+    <header><h2 id="referenz">Referenz</h2></header>
+    <div class="sec-body">
+      <h3 style="margin-bottom: 10px">Weingut Martin Klein, Johannisberg</h3>
+      <p>
+        Onlineshop mit eigenen Produkt-Kategorien für jede Weininformation, neu gestaltete Produktseiten,
+        strukturierte Daten für Google, ein Styleguide für Web und Druck sowie Preislisten und Vertriebsunterlagen.
+        Alles selbst gebaut und im laufenden Betrieb gepflegt.
+      </p>
+      <p><a href={profile.winery}>weingut-martin-klein.de</a></p>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="ablauf">
+    <header><h2 id="ablauf">So läuft es ab</h2></header>
+    <div class="sec-body">
+      <ol class="steps">
+        <li>Sie schreiben mir kurz, worum es geht und was Sie heute haben.</li>
+        <li>Wir telefonieren, und ich schaue mir Website und Abläufe an.</li>
+        <li>Sie bekommen ein schriftliches Angebot mit Umfang, Zeitplan und Preis.</li>
+        <li>Ich setze um, zeige Zwischenstände und erkläre am Ende, wie Sie selbst weiterpflegen.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="kontakt">
+    <header><h2 id="kontakt">Kontakt</h2></header>
+    <div class="sec-body">
+      <div class="quote-box">
+        <p>Weil ich nebenbei studiere, nehme ich nur wenige Projekte gleichzeitig an. Am besten fragen Sie früh an.</p>
+        <a class="contact-mail" href={mail}>{profile.email}</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

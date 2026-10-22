@@ -1,0 +1,125 @@
+---
+interface Props {
+  name: 'doa' | 'leak';
+  alt: string;
+}
+const { name, alt } = Astro.props;
+
+// DOA: plane wavefronts arriving from the upper left onto a square array
+const theta = (152 * Math.PI) / 180; // direction towards source
+const ux = Math.cos(theta);
+const uy = -Math.sin(theta); // svg y down
+const cx = 400;
+const cy = 250;
+const h = 70;
+const mics = [
+  { x: cx - h, y: cy - h, n: 1 },
+  { x: cx + h, y: cy - h, n: 2 },
+  { x: cx + h, y: cy + h, n: 3 },
+  { x: cx - h, y: cy + h, n: 4 },
+];
+// order of arrival = largest projection onto u first
+const proj = mics.map((m) => (m.x - cx) * ux + (m.y - cy) * uy);
+const order = [...proj.keys()].sort((a, b) => proj[b] - proj[a]);
+const fronts = [-260, -170, -80, 10, 100, 190].map((d) => {
+  // line perpendicular to u at signed distance d from centre
+  const px = cx + ux * -d;
+  const py = cy + uy * -d;
+  const L = 600;
+  return { x1: px - uy * L, y1: py + ux * L, x2: px + uy * L, y2: py - ux * L };
+});
+---
+
+{
+  name === 'doa' && (
+    <svg viewBox="0 0 800 500" role="img" aria-label={alt}>
+      <rect width="800" height="500" fill="#ffffff" />
+      <defs>
+        <marker id="arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#4e6a14" />
+        </marker>
+      </defs>
+      <g stroke="#9aa59a" stroke-width="1.2">
+        {fronts.map((f, i) => (
+          <line {...f} stroke-opacity={0.25 + i * 0.1} />
+        ))}
+      </g>
+      <line x1={cx} y1={cy} x2={cx + ux * 230} y2={cy + uy * 230} stroke="#4e6a14" stroke-width="2.5" marker-end="url(#arw)" />
+      <text x={cx + ux * 240 - 10} y={cy + uy * 240 - 12} font-family="Archivo Variable, Archivo, sans-serif" font-size="18" fill="#4e6a14">to source</text>
+      <rect x={cx - h} y={cy - h} width={2 * h} height={2 * h} fill="none" stroke="#17212b" stroke-dasharray="4 5" stroke-opacity="0.5" />
+      {mics.map((m) => {
+        const rank = order.indexOf(m.n - 1) + 1;
+        return (
+          <g>
+            <circle cx={m.x} cy={m.y} r="11" fill="#17212b" />
+            <circle cx={m.x} cy={m.y} r="4" fill="#c9dc6a" />
+            <text
+              x={m.x}
+              y={m.y + (m.y > cy ? 38 : -24)}
+              text-anchor="middle"
+              font-family="Archivo Variable, Archivo, sans-serif"
+              font-size="18"
+              fill="#17212b"
+            >
+              {`hears it ${['first', 'second', 'third', 'last'][rank - 1]}`}
+            </text>
+          </g>
+        );
+      })}
+      <text x="40" y="466" font-family="Archivo Variable, Archivo, sans-serif" font-size="17" fill="#56616c">
+        Bearing from arrival-time differences: Δt = (d · cos θ) / c, c ≈ 343 m/s
+      </text>
+    </svg>
+  )
+}
+
+{
+  name === 'leak' && (
+    <svg viewBox="0 0 800 500" role="img" aria-label={alt}>
+      <rect width="800" height="500" fill="#ffffff" />
+      <g fill="#e8ebe5" stroke="#c4cabf">
+        <rect x="70" y="60" width="150" height="90" rx="4" />
+        <rect x="290" y="60" width="210" height="90" rx="4" />
+        <rect x="570" y="60" width="160" height="150" rx="4" />
+        <rect x="70" y="230" width="110" height="170" rx="4" />
+        <rect x="250" y="230" width="250" height="80" rx="4" />
+        <rect x="250" y="370" width="130" height="70" rx="4" />
+        <rect x="450" y="370" width="280" height="70" rx="4" />
+      </g>
+      <g stroke="#9aa59a" stroke-width="2" fill="none">
+        <path d="M120 150 V 220" />
+        <path d="M400 150 V 230" />
+        <path d="M640 210 V 370" />
+      </g>
+      <path
+        d="M30 190 H 540 V 340 H 210 V 455 H 760 V 260 H 540"
+        fill="none"
+        stroke="#4e6a14"
+        stroke-width="2.5"
+        stroke-dasharray="7 7"
+      />
+      <g>
+        <rect x="522" y="322" width="36" height="36" rx="6" fill="#17212b" />
+        <circle cx="540" cy="340" r="5" fill="#c9dc6a" />
+      </g>
+      {[
+        { x: 400, y: 172, r: 3, label: 'leak, high loss' },
+        { x: 640, y: 300, r: 2, label: 'leak, medium' },
+        { x: 120, y: 205, r: 1, label: 'leak, small' },
+      ].map((l) => (
+        <g>
+          {Array.from({ length: l.r + 1 }, (_, k) => (
+            <circle cx={l.x} cy={l.y} r={8 + k * 9} fill="none" stroke="#f0a43a" stroke-opacity={0.9 - k * 0.2} stroke-width="2" />
+          ))}
+          <circle cx={l.x} cy={l.y} r="5" fill="#f0a43a" />
+          <text x={l.x + 14 + l.r * 9} y={l.y + 5} font-family="Archivo Variable, Archivo, sans-serif" font-size="16" fill="#17212b">
+            {l.label}
+          </text>
+        </g>
+      ))}
+      <text x="40" y="30" font-family="Archivo Variable, Archivo, sans-serif" font-size="16" fill="#56616c">
+        Patrol route (dashed), machines and pipework (grey), localised leaks ranked by loss
+      </text>
+    </svg>
+  )
+}

@@ -1,27 +1,83 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { cvSections, profile } from '../data/cv';
+import Entries from '../components/Entries.astro';
+import { profile, experience, education, engagement, skills, languages } from '../data/cv';
+import { projects } from '../data/projects';
+
+const selected = projects.filter((p) => p.featured);
 ---
 
-<BaseLayout title="CV — Felix Klein">
-  <section class="page-hero compact">
-    <p class="eyebrow">Curriculum vitae</p>
-    <h1>{profile.name}</h1>
-    <p>{profile.headline} · {profile.location}</p>
-    <div class="hero-actions">
-      <a class="button primary" href="/cv/Felix_Klein_CV.pdf" target="_blank">Download PDF CV</a>
-      <a class="button ghost" href={`mailto:${profile.email}`}>Email</a>
-    </div>
-  </section>
+<BaseLayout title="CV · Felix Klein" description="Curriculum vitae of Felix Klein: M.Sc. Robotics, Cognition & Intelligence at TUM, mathematics background, research and industry experience.">
+  <div class="cv">
+    <header class="page-head">
+      <h1>Felix Klein</h1>
+      <p class="lead">
+        {profile.role}. Munich ·{' '}
+        <a href={`mailto:${profile.email}`}>{profile.email}</a> ·{' '}
+        <a href={profile.site}>felixklein84.github.io</a>
+      </p>
+      <div class="actions no-print">
+        <button class="btn primary" type="button" onclick="window.print()">Save as PDF</button>
+        <a class="btn" href={`mailto:${profile.email}?subject=CV%20request`}>Request the full CV</a>
+      </div>
+    </header>
 
-  <section class="cv-grid">
-    {cvSections.map((section) => (
-      <article class="cv-card">
-        <h2>{section.title}</h2>
-        <ul>
-          {section.items.map((item) => <li>{item}</li>)}
-        </ul>
-      </article>
-    ))}
-  </section>
+    <section class="sec" aria-labelledby="cv-edu">
+      <header><h2 id="cv-edu">Education</h2></header>
+      <div class="sec-body"><Entries entries={education} /></div>
+    </section>
+
+    <section class="sec" aria-labelledby="cv-exp">
+      <header><h2 id="cv-exp">Experience</h2></header>
+      <div class="sec-body"><Entries entries={experience} /></div>
+    </section>
+
+    <section class="sec" aria-labelledby="cv-proj">
+      <header><h2 id="cv-proj">Selected projects</h2></header>
+      <div class="sec-body">
+        <ol class="entries">
+          {
+            selected.map((p) => (
+              <li>
+                <span class="entry-when">{p.year}</span>
+                <div>
+                  <a class="entry-title" href={`/projects/${p.slug}`} style="color: inherit">
+                    {p.title}
+                  </a>
+                  <span class="entry-org">{p.role}</span>
+                  <ul>
+                    <li>{p.summary}</li>
+                  </ul>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="cv-eng">
+      <header><h2 id="cv-eng">Engagement</h2></header>
+      <div class="sec-body"><Entries entries={engagement} /></div>
+    </section>
+
+    <section class="sec" aria-labelledby="cv-skills">
+      <header><h2 id="cv-skills">Skills</h2></header>
+      <div class="sec-body">
+        <dl class="skills">
+          {
+            skills.map((s) => (
+              <>
+                <dt>{s.area}</dt>
+                <dd>{s.items}</dd>
+              </>
+            ))
+          }
+          <dt>Languages</dt>
+          <dd>{languages}</dd>
+        </dl>
+
+      </div>
+    </section>
+  </div>
 </BaseLayout>

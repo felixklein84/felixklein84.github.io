@@ -1,51 +1,222 @@
 export const profile = {
   name: 'Felix Klein',
-  headline: 'Mathematics, AI & real-world systems',
-  location: 'Munich, Germany',
+  role: 'Robotics, Cognition & Intelligence (M.Sc.) at TUM',
+  location: 'Munich',
   email: 'felixklein84@gmail.com',
   github: 'https://github.com/felixklein84',
   linkedin: 'https://www.linkedin.com/in/felix-klein-007bba218/',
   winery: 'https://weingut-martin-klein.de',
+  site: 'https://felixklein84.github.io',
 };
 
-export const cvSections = [
+/** What is happening right now. Update `asOf` whenever this list changes. */
+export const now = {
+  asOf: 'October 2026',
+  items: [
+    {
+      what: 'Started the M.Sc. Robotics, Cognition & Intelligence at TUM',
+      detail: 'This semester: Machine Learning, Fundamentals of AI, Automation & Robotics in Agriculture, Real-Time Systems, Product Development.',
+    },
+    {
+      what: 'Coordinating autonomous tractors at the TUM Chair of Agricultural Mechatronics',
+      detail: 'Research assistant on multi-agent routing for field robots, extended to March 2027.',
+      href: '/projects/autonomous-field-operations',
+    },
+    {
+      what: 'Applied to the Bosch × VDMA challenge on robotic leak detection',
+      detail: 'Acoustic sensing on a mobile robot to find compressed-air leaks during production. Kick-off on 18 November.',
+      href: '/projects/compressed-air-leak-detection',
+    },
+    {
+      what: 'Working student at Deutsche Aircraft',
+      detail: 'Supplier data and process automation for the D328eco production ramp-up.',
+    },
+  ],
+};
+
+export type Entry = {
+  when: string;
+  title: string;
+  org: string;
+  place?: string;
+  points: string[];
+};
+
+export const experience: Entry[] = [
   {
-    title: 'Focus',
-    items: [
-      'Scientific computing, stochastic modelling and simulation (Markov chains, SSA, ODEs)',
-      'Robotics, multi-agent systems and autonomous field operations',
-      'Supply-chain analytics, data quality and process automation',
-      'Digital business systems, UX and e-commerce',
+    when: '02/2026 – 03/2027',
+    title: 'Student research assistant, collaborative routing & simulation',
+    org: 'TUM, Chair of Agricultural Mechatronics',
+    place: 'Garching',
+    points: [
+      'Python simulation environment for route-allocation and consensus algorithms on realistic agricultural field graphs.',
+      'Collaborative routing heuristics for Controlled Traffic Farming, evaluated on runtime, solution quality and scalability.',
     ],
   },
   {
-    title: 'Education',
-    items: [
-      'B.Sc. Business Mathematics, University of Mannheim — stochastic processes, numerical analysis, optimisation, statistics and programming',
-      'Bachelor thesis: Glioblastoma cell-population dynamics modelled with continuous-time Markov chains',
-      'Exchange semester at the University of Sydney — applied mathematics and international perspective',
-      'Target master: robotics, biomedical engineering or applied physics (TUM, ETH Zürich)',
+    when: '02/2026 – now',
+    title: 'Working student, process automation & digitalisation',
+    org: 'Deutsche Aircraft',
+    place: 'Oberpfaffenhofen',
+    points: [
+      'Data flows between ERP and the SupplyOn supplier platform for the D328eco serial-production ramp-up.',
+      'Quantitative metrics for data quality, order confirmations and delivery-date reliability.',
     ],
   },
   {
-    title: 'Experience',
-    items: [
-      'Deutsche Aircraft (02/2026–present) — Process Automation & Digitalisation: ERP/SupplyOn data-flow modelling, supplier delivery-date analytics and data-quality metrics for the D328eco serial production ramp-up',
-      'TUM · Chair of Agricultural Mechatronics (02/2026–present) — Research: Python simulation environment for collaborative multi-agent routing algorithms and combinatorial field-coverage optimisation',
-      'BMW Group R&I Centre (04–09/2025) — Engineering Operations & Data Analytics: demand-forecasting pipeline for prototype production, discrete-event warehouse simulation, CATIA V5 prototype cubing support',
-      'KPMG Lighthouse (09/2024–02/2025) — AI & Data Science Consulting: simulation backend optimisation (−25% runtime), Selenium/Azure DevOps CI automation, stochastic reserve forecasting in R',
-      'KombiRail Europe (03/2025) — Strategy & Financial Analysis: quantitative performance reporting and EUR 400k cost-saving scenarios for an M&A process',
-      'Cosuno Ventures (08/2021–09/2022) — Revenue Operations & Sales Analytics: HubSpot/VBA reporting automation, reducing KPI preparation from two days to three hours',
-      'Weingut Martin Klein (2015–present) — Digital Business: WooCommerce e-commerce build, SEO, web analytics, conversion optimisation and B2B sales materials',
+    when: '05/2025 – now',
+    title: 'Aerostructures team, landing gear',
+    org: 'HORYZN student initiative',
+    place: 'TUM',
+    points: ['Landing-gear concepts for autonomous aircraft: impact loads, structural sizing, CAD prototypes.'],
+  },
+  {
+    when: '04/2025 – 09/2025',
+    title: 'Intern, engineering operations & data analytics',
+    org: 'BMW Group Research & Innovation Centre',
+    place: 'Munich',
+    points: [
+      'Forecasting pipeline for axle-assembly demand in prototype production (Python, time series, Power BI).',
+      'Discrete-event simulation of warehouse utilisation at the Parsdorf supply centre.',
+      'Prototype cubing support with CATIA V5 and tolerance analysis.',
     ],
   },
   {
-    title: 'Selected Skills',
-    items: [
-      'Python, Julia, R, SQL, Git, GitHub Actions, LaTeX',
-      'NumPy, pandas, Matplotlib, SciPy, NetworkX, Shapely, Jupyter',
-      'SAP, Excel, Power BI (supply-chain analytics)',
-      'WordPress, WooCommerce, Elementor, ACF, RankMath (web & e-commerce)',
+    when: '03/2025',
+    title: 'Intern, strategy & financial analysis',
+    org: 'KombiRail Europe',
+    place: 'Frankfurt',
+    points: ['Cost-saving scenarios of about EUR 400k p.a. as decision support in an M&A process.'],
+  },
+  {
+    when: '09/2024 – 02/2025',
+    title: 'Intern, AI & data science consulting',
+    org: 'KPMG Lighthouse',
+    place: 'Saarbrücken',
+    points: [
+      'Numerical modules for a simulation backend; vectorisation and caching cut scenario runtime by about 25 %.',
+      'Selenium UI regression tests in an Azure DevOps CI pipeline, about half the manual testing per sprint.',
+      'Refactored R code for stochastic reserve forecasting.',
     ],
   },
+  {
+    when: '08/2021 – 09/2022',
+    title: 'Working student, revenue operations',
+    org: 'Cosuno',
+    place: 'Berlin',
+    points: ['Automated KPI reporting with HubSpot and VBA: two days of preparation down to three hours.'],
+  },
+  {
+    when: '2015 – now',
+    title: 'Digital lead',
+    org: 'Weingut Martin Klein (family winery)',
+    place: 'Johannisberg, Rheingau',
+    points: ['Shop, product data, search visibility, brand system and B2B sales material.'],
+  },
+];
+
+export const education: Entry[] = [
+  {
+    when: '10/2026 – now',
+    title: 'M.Sc. Robotics, Cognition & Intelligence',
+    org: 'Technical University of Munich',
+    points: [
+      'Machine Learning, Fundamentals of AI, Automation & Robotics in Agriculture, Real-Time Systems, Methods of Product Development.',
+    ],
+  },
+  {
+    when: '10/2025 – 09/2026',
+    title: 'Physics studies and engineering prerequisites',
+    org: 'Technical University of Munich',
+    points: ['Bridge from mathematics into engineering: robot dynamics, control engineering, signal processing, physics.'],
+  },
+  {
+    when: '09/2020 – 09/2024',
+    title: 'B.Sc. Business Mathematics',
+    org: 'University of Mannheim',
+    points: [
+      'Stochastic processes, Markov chains, dynamical systems, numerical methods, optimisation, scientific programming.',
+      'Thesis: Mathematical brain-tumour modelling using the example of glioblastoma. Cell dynamics and therapy effects with continuous-time Markov chains.',
+    ],
+  },
+  {
+    when: '07/2023 – 02/2024',
+    title: 'Exchange semester, mathematics & computer science',
+    org: 'Western Sydney University',
+    place: 'Australia',
+    points: ['Machine learning, data science, mathematical modelling; CNN image classification in PyTorch.'],
+  },
+  {
+    when: '2020',
+    title: 'Abitur',
+    org: 'Rheingau-Gymnasium, Geisenheim',
+    points: ['Physics prize of the German Physical Society (DPG).'],
+  },
+];
+
+export const engagement: Entry[] = [
+  {
+    when: '2024',
+    title: '2nd place, ChefTreff Hackathon',
+    org: 'Lufthansa Industry Solutions & ZeroG',
+    place: 'Hamburg',
+    points: ['Stochastic forecasting pipeline with XGBoost and Monte Carlo simulation to plan onboard catering under demand uncertainty.'],
+  },
+  {
+    when: '2023',
+    title: 'STADS Datathon, EY challenge',
+    org: 'Student Association for Data Analytics & Statistics',
+    place: 'Mannheim',
+    points: ['Matching algorithm for duplicate financial transactions using fuzzy hashing and feature engineering.'],
+  },
+  {
+    when: '08/2025 – 09/2025',
+    title: 'Volunteer teacher',
+    org: 'High school in Jaipur',
+    place: 'India',
+    points: [
+      'Designed and taught an “English for job interviews” course for grades 10–12, with mock interviews.',
+      'Digital literacy and AI module: students wrote CVs, used generative AI for guided research and built small projects.',
+    ],
+  },
+  {
+    when: '01/2024, 01/2025',
+    title: 'Snowboard instructor',
+    org: 'TG Rüdesheim JuSki',
+    place: 'Hochkönig, Austria',
+    points: ['Coaching about 50 teenagers aged 14–17 as part of a 12-person team.'],
+  },
+  {
+    when: '09/2022 – 09/2023',
+    title: 'Student council mathematics, budget and quality assurance',
+    org: 'University of Mannheim',
+    points: ['Allocation of an annual student-body budget of about EUR 500k.'],
+  },
+];
+
+export const languages = 'German (native), English (C2), Spanish (B1), Japanese (A2)';
+
+export const skills = [
+  { area: 'Mathematics', items: 'Stochastic processes, Markov chains, Monte Carlo, numerical optimisation, dynamical systems' },
+  { area: 'Robotics', items: 'Kinematics and dynamics, control, multi-agent planning, discrete-event simulation' },
+  { area: 'Programming', items: 'Python, Julia, C, R, MATLAB, SQL, TypeScript, basic C++; Git, CI/CD, Sphinx, LaTeX' },
+  { area: 'Libraries', items: 'NumPy, SciPy, pandas, scikit-learn, PyTorch, XGBoost, NetworkX, Shapely, React' },
+  { area: 'Embedded', items: 'Infineon PSOC Edge, ModusToolbox, DEEPCRAFT Studio, multi-channel audio capture' },
+  { area: 'Engineering tools', items: 'CATIA V5, Power BI, SAP, SupplyOn, HubSpot, WordPress, WooCommerce' },
+];
+
+export const reading = {
+  now: { title: 'The Beginning of Infinity', author: 'David Deutsch' },
+  favourites: [
+    { title: 'Sapiens', author: 'Yuval Noah Harari' },
+    { title: 'Factfulness', author: 'Hans Rosling' },
+    { title: 'A Brief History of Time', author: 'Stephen Hawking' },
+  ],
+};
+
+export const offline = [
+  'Snowboard instructor on the JuSki trip each winter, and I design its yearly logo and merch.',
+  'Taught English for job interviews, digital skills and Python in India.',
+  'Half-marathons, calisthenics, surfing when I can.',
+  'Making things by hand: restoring an old wine barrel, forging a ring, a goldsmithing course, and filming all of it.',
 ];

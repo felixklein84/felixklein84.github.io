@@ -1,0 +1,30 @@
+---
+import type { Entry } from '../data/cv';
+
+interface Props {
+  entries: Entry[];
+  compact?: boolean;
+}
+const { entries, compact = false } = Astro.props;
+---
+
+<ol class="entries" reversed>
+  {
+    entries.map((e) => (
+      <li>
+        <span class="entry-when">{e.when}</span>
+        <div>
+          <span class="entry-title">{e.title}</span>
+          <span class="entry-org">{e.place ? `${e.org}, ${e.place}` : e.org}</span>
+          {!compact && e.points.length > 0 && (
+            <ul>
+              {e.points.map((p) => (
+                <li>{p}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </li>
+    ))
+  }
+</ol>

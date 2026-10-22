@@ -1,0 +1,314 @@
+---
+/**
+ * Interactive toy model of acoustic direction-of-arrival estimation.
+ * A source emits wavefronts; four microphones in a square record arrival
+ * times (with jitter); a far-field least-squares fit over all six mic pairs
+ * turns the time differences into a bearing estimate.
+ */
+---
+
+<figure class="array" data-array>
+  <div class="array-panel">
+    <canvas aria-label="Simulation: a sound source emits wavefronts that reach four microphones at different times. The estimated direction is drawn from the array centre." role="img"></canvas>
+    <p class="array-hint" data-hint>Move the pointer to move the sound source</p>
+  </div>
+  <ul class="array-readout" aria-hidden="true">
+    <li>Estimated bearing <b data-est>–</b></li>
+    <li>True bearing <b data-true>–</b></li>
+    <li>Largest time difference <b data-dt>–</b></li>
+  </ul>
+  <figcaption>
+    Four microphones hear the same sound a fraction of a millisecond apart. Those time differences alone
+    give the direction. I built this on real hardware for siren detection, and it is the core of my approach to
+    finding compressed-air leaks.
+  </figcaption>
+</figure>
+
+<script>
+  type V = { x: number; y: number };
+
+  const C = 343; // speed of sound, m/s
+  const SPAN_M = 5; // metres across the panel width
+  const MIC_HALF_M = 0.3; // half side of the square array, m
+  const JITTER_S = 12e-6; // timing noise per mic, s
+  const EMIT_EVERY = 0.85; // s (visual)
+  const VIS_SPEED = 1.15; // panel widths per second (visual wave speed)
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function gauss() {
+    let u = 0;
+    let v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+
+  function init(root: HTMLElement) {
+    const panel = root.querySelector<HTMLElement>('.array-panel')!;
+    const canvas = root.querySelector('canvas')!;
+    const ctx = canvas.getContext('2d')!;
+    const hint = root.querySelector<HTMLElement>('[data-hint]')!;
+    const outEst = root.querySelector<HTMLElement>('[data-est]')!;
+    const outTrue = root.querySelector<HTMLElement>('[data-true]')!;
+    const outDt = root.querySelector<HTMLElement>('[data-dt]')!;
+
+    let W = 0;
+    let H = 0;
+    let pxPerM = 1;
+    let dpr = 1;
+
+    // world coords in metres, origin at array centre, y up
+    let source: V = { x: 1.6, y: 1.0 };
+    let pointer: V | null = null;
+    let rings: { o: V; t0: number }[] = [];
+    let flashes = [0, 0, 0, 0];
+    let est = 0;
+    let estSmooth: number | null = null;
+    let lastEmit = -1;
+    let clock = 0;
+
+    const mics: V[] = [
+      { x: -MIC_HALF_M, y: MIC_HALF_M },
+      { x: MIC_HALF_M, y: MIC_HALF_M },
+      { x: MIC_HALF_M, y: -MIC_HALF_M },
+      { x: -MIC_HALF_M, y: -MIC_HALF_M },
+    ];
+
+    function resize() {
+      const r = panel.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = r.width;
+      H = r.height;
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      pxPerM = W / SPAN_M;
+      if (reduce) draw();
+    }
+
+    const toPx = (p: V) => ({ x: W / 2 + p.x * pxPerM, y: H / 2 - p.y * pxPerM });
+    const toM = (x: number, y: number): V => ({ x: (x - W / 2) / pxPerM, y: (H / 2 - y) / pxPerM });
+    const dist = (a: V, b: V) => Math.hypot(a.x - b.x, a.y - b.y);
+
+    /** Far-field least squares over all mic pairs → bearing in radians. */
+    function estimate(src: V) {
+      const t = mics.map((m) => dist(src, m) / C + JITTER_S * gauss());
+      let a11 = 0, a12 = 0, a22 = 0, b1 = 0, b2 = 0;
+      let maxDt = 0;
+      for (let i = 0; i < 4; i++) {
+        for (let j = i + 1; j < 4; j++) {
+          const dx = (mics[i].x - mics[j].x) / C;
+          const dy = (mics[i].y - mics[j].y) / C;
+          const rhs = -(t[i] - t[j]);
+          a11 += dx * dx; a12 += dx * dy; a22 += dy * dy;
+          b1 += dx * rhs; b2 += dy * rhs;
+          maxDt = Math.max(maxDt, Math.abs(t[i] - t[j]));
+        }
+      }
+      const det = a11 * a22 - a12 * a12;
+      const ux = (a22 * b1 - a12 * b2) / det;
+      const uy = (a11 * b2 - a12 * b1) / det;
+      return { bearing: Math.atan2(uy, ux), maxDt };
+    }
+
+    const deg = (r: number) => ((r * 180) / Math.PI + 360) % 360;
+
+    function update(now: number) {
+      if (!pointer) {
+        // slow Lissajous wander when nobody is steering
+        const s = now * 0.00012;
+        source = { x: 2.1 * Math.cos(s * 1.7 + 0.6), y: 1.1 * Math.sin(s * 2.3 + 0.3) + 0.15 };
+      } else {
+        source.x += (pointer.x - source.x) * 0.25;
+        source.y += (pointer.y - source.y) * 0.25;
+      }
+
+      const t = now / 1000;
+      if (t - lastEmit > EMIT_EVERY) {
+        lastEmit = t;
+        rings.push({ o: { ...source }, t0: t });
+        const e = estimate(source);
+        est = e.bearing;
+        outEst.textContent = `${deg(est).toFixed(1)}°`;
+        outTrue.textContent = `${deg(Math.atan2(source.y, source.x)).toFixed(1)}°`;
+        outDt.textContent = `${(e.maxDt * 1000).toFixed(2)} ms`;
+      }
+
+      const v = VIS_SPEED * SPAN_M; // metres per visual second
+      const maxR = SPAN_M * 1.3;
+      rings = rings.filter((r) => (t - r.t0) * v < maxR);
+
+      // flash a mic when a wavefront passes it
+      flashes = flashes.map((f) => Math.max(0, f - 0.06));
+      for (const r of rings) {
+        const rad = (t - r.t0) * v;
+        const prev = (t - r.t0 - 1 / 60) * v;
+        mics.forEach((m, i) => {
+          const d = dist(r.o, m);
+          if (d <= rad && d > prev) flashes[i] = 1;
+        });
+      }
+
+      if (estSmooth === null) estSmooth = est;
+      let diff = est - estSmooth;
+      diff = Math.atan2(Math.sin(diff), Math.cos(diff));
+      estSmooth += diff * 0.2;
+      clock = t;
+    }
+
+    function draw() {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.fillStyle = '#17212b';
+      ctx.fillRect(0, 0, W, H);
+
+      // metre grid as dots
+      ctx.fillStyle = 'rgba(201,220,106,0.13)';
+      for (let gx = -Math.ceil(SPAN_M); gx <= SPAN_M; gx += 0.5) {
+        for (let gy = -SPAN_M; gy <= SPAN_M; gy += 0.5) {
+          const p = toPx({ x: gx, y: gy });
+          if (p.x < 0 || p.x > W || p.y < 0 || p.y > H) continue;
+          ctx.fillRect(p.x - 0.75, p.y - 0.75, 1.5, 1.5);
+        }
+      }
+
+      // wavefronts
+      const v = VIS_SPEED * SPAN_M;
+      if (reduce) {
+        const o = toPx(source);
+        [0.6, 1.3, 2.0, 2.7].forEach((rm, k) => {
+          ctx.strokeStyle = `rgba(232,236,229,${0.5 - k * 0.1})`;
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.arc(o.x, o.y, rm * pxPerM, 0, Math.PI * 2);
+          ctx.stroke();
+        });
+      } else {
+        for (const r of rings) {
+          const rad = (clock - r.t0) * v;
+          const o = toPx(r.o);
+          const a = Math.max(0, 0.55 * (1 - rad / (SPAN_M * 1.3)));
+          ctx.strokeStyle = `rgba(232,236,229,${a})`;
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.arc(o.x, o.y, rad * pxPerM, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      }
+
+      // estimated bearing ray
+      const c = toPx({ x: 0, y: 0 });
+      const b = reduce ? est : (estSmooth ?? est);
+      const L = Math.hypot(W, H);
+      const grad = ctx.createLinearGradient(c.x, c.y, c.x + Math.cos(b) * L * 0.5, c.y - Math.sin(b) * L * 0.5);
+      grad.addColorStop(0, 'rgba(201,220,106,0.95)');
+      grad.addColorStop(1, 'rgba(201,220,106,0)');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(c.x, c.y);
+      ctx.lineTo(c.x + Math.cos(b) * L, c.y - Math.sin(b) * L);
+      ctx.stroke();
+
+      // bearing arc
+      ctx.strokeStyle = 'rgba(201,220,106,0.5)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      const ar = MIC_HALF_M * pxPerM * 2.2;
+      ctx.arc(c.x, c.y, ar, 0, -b, b > 0);
+      ctx.stroke();
+
+      // array frame + mics
+      ctx.strokeStyle = 'rgba(201,220,106,0.35)';
+      ctx.setLineDash([3, 4]);
+      ctx.beginPath();
+      mics.forEach((m, i) => {
+        const p = toPx(m);
+        i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y);
+      });
+      ctx.closePath();
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      mics.forEach((m, i) => {
+        const p = toPx(m);
+        const f = reduce ? 0 : flashes[i];
+        if (f > 0) {
+          ctx.fillStyle = `rgba(201,220,106,${0.35 * f})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 6 + 10 * f, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.fillStyle = '#c9dc6a';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // source
+      const s = toPx(source);
+      ctx.fillStyle = 'rgba(240,164,58,0.25)';
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, 13, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#f0a43a';
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, 6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function loop(now: number) {
+      update(now);
+      draw();
+      if (visible) raf = requestAnimationFrame(loop);
+    }
+
+    function setPointer(e: PointerEvent) {
+      const r = canvas.getBoundingClientRect();
+      pointer = toM(e.clientX - r.left, e.clientY - r.top);
+      hint.style.opacity = '0';
+      if (reduce) {
+        source = { ...pointer };
+        const e2 = estimate(source);
+        est = e2.bearing;
+        outEst.textContent = `${deg(est).toFixed(1)}°`;
+        outTrue.textContent = `${deg(Math.atan2(source.y, source.x)).toFixed(1)}°`;
+        outDt.textContent = `${(e2.maxDt * 1000).toFixed(2)} ms`;
+        draw();
+      }
+    }
+
+    panel.addEventListener('pointermove', setPointer);
+    panel.addEventListener('pointerdown', setPointer);
+    panel.addEventListener('pointerleave', () => {
+      pointer = null;
+      hint.style.opacity = '';
+    });
+
+    let raf = 0;
+    let visible = true;
+    new ResizeObserver(resize).observe(panel);
+    resize();
+    update(performance.now());
+    draw();
+
+    if (reduce) {
+      const e0 = estimate(source);
+      est = e0.bearing;
+      outEst.textContent = `${deg(est).toFixed(1)}°`;
+      outTrue.textContent = `${deg(Math.atan2(source.y, source.x)).toFixed(1)}°`;
+      outDt.textContent = `${(e0.maxDt * 1000).toFixed(2)} ms`;
+      draw();
+      return;
+    }
+
+    new IntersectionObserver(([entry]) => {
+      const was = visible;
+      visible = entry.isIntersecting;
+      if (visible && !was) raf = requestAnimationFrame(loop);
+      if (!visible) cancelAnimationFrame(raf);
+    }).observe(panel);
+    raf = requestAnimationFrame(loop);
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-array]').forEach(init);
+</script>
